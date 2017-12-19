@@ -1,0 +1,130 @@
+function printDirections(stateMachineGraph) {
+    stateMachineGraph.forEach((direction, index) => {
+        Object.keys(direction).forEach(stimulus => {
+            console.log(`${index} === ${stimulus}/${direction[stimulus].reaction} ===> ${direction[stimulus].endpoint}`);
+        });
+        console.log('---');
+    });
+}
+
+function generateStimulusSequences(maxLength) {
+    const stimulusSequencesArr = [];
+
+    function addStimuluses(stimulusSequence) {
+        stimulusSequencesArr.push(stimulusSequence);
+
+        if (stimulusSequence.length >= maxLength)
+            return;
+
+        addStimuluses(`${stimulusSequence}a`);
+        addStimuluses(`${stimulusSequence}b`);
+    }
+
+    addStimuluses('a');
+    addStimuluses('b');
+    return stimulusSequencesArr.sort((a, b) => {
+        if (a.length > b.length)
+            return 1;
+        if (a.length < b.length)
+            return -1;
+        if (a > b)
+            return 1;
+        if (a < b)
+            return -1;
+        return 0;
+    });
+}
+
+function computeReactionSequence(stateMachineGraph, nodeIndex, stimulusSequence) {
+    let res = '';
+    while (stimulusSequence !== '') {
+        const step = stateMachineGraph[nodeIndex][stimulusSequence[0]];
+        res += step.reaction;
+        nodeIndex = step.endpoint;
+        stimulusSequence = stimulusSequence.substring(1);
+    }
+    return res;
+}
+
+function computeReactionSequences(stateMachineGraph, stimulusSequence) {
+    return stateMachineGraph.map((el, index) => computeReactionSequence(stateMachineGraph, index, stimulusSequence));
+}
+
+function computeReactionSequencesTable(stateMachineGraph) {
+    const stimulusSequences = generateStimulusSequences(stateMachineGraph.length);
+    const res = {};
+    stimulusSequences.forEach(stimulusSequence => {
+        res[stimulusSequence] = computeReactionSequences(stateMachineGraph, stimulusSequence);
+    });
+    return res;
+}
+
+function findDeterminingSequence(reactionSequencesTable) {
+    return Object.keys(reactionSequencesTable)
+    .filter(stimulusSequence =>
+        new Set(reactionSequencesTable[stimulusSequence]).size === reactionSequencesTable[stimulusSequence].length);
+}
+
+function computeCharacterizingSetTable(reactionSequencesTable) {
+    const stimulusSequences = Object.keys(reactionSequencesTable);
+    const res = new Map();
+
+    for (let i = 0; i < stimulusSequences.length; i++)
+        for (let j = i + 1; j < stimulusSequences.length; j++) {
+            const stimulusSequenceA = stimulusSequences[i];
+            const stimulusSequenceB = stimulusSequences[j];
+            const reactionSequenceA = reactionSequencesTable[stimulusSequenceA];
+            const reactionSequenceB = reactionSequencesTable[stimulusSequenceB];
+            res.set([stimulusSequenceA, stimulusSequenceB],
+                reactionSequenceA.map((el, index) => el + reactionSequenceB[index]));
+        }
+    return res;
+}
+
+function getSequencesSets(characterizingSetTable) {
+    return Array.from((characterizingSetTable.keys())).sort((combA, combB) => {
+        const a1 = combA[0];
+        const a2 = combA[1];
+        const b1 = combB[0];
+        const b2 = combB[1];
+
+        const minA = Math.min(a1.length, a2.length);
+        const minB = Math.min(b1.length, b2.length);
+        const maxA = Math.max(a1.length, a2.length);
+        const maxB = Math.max(b1.length, b2.length);
+
+        if (maxA > maxB)
+            return 1;
+        if (maxA < maxB)
+            return -1;
+        if (minA > minB)
+            return 1;
+        if (minA < minB)
+            return -1;
+        if (a1 > b1)
+            return 1;
+        if (a1 < b1)
+            return -1;
+        if (a2 > b2)
+            return 1;
+        if (a2 < b2)
+            return -1;
+        return 0;
+    });
+}
+
+function findCharacterizingSets(characterizingSetTable) {
+    return getSequencesSets(characterizingSetTable)
+    .filter(sequencesSet =>
+        new Set(characterizingSetTable.get(sequencesSet)).size === characterizingSetTable.get(sequencesSet).length);
+}
+
+export {
+    printDirections,
+    generateStimulusSequences,
+    computeReactionSequencesTable,
+    findDeterminingSequence,
+    computeCharacterizingSetTable,
+    getSequencesSets,
+    findCharacterizingSets
+};
