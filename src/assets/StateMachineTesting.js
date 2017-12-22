@@ -123,39 +123,24 @@ function findCharacterizingSets(characterizingSetTable) {
 
 function findCoveringSet(stateMachineGraph) {
     const reachedNodes = new Set([0]);
-    const result = new Set(['ε']);
-
+    const result = ['ε'];
     const bfsQueue = new Queue();
+    bfsQueue.enqueue({ index: 0, path: '' });
 
-    if (!reachedNodes.has(stateMachineGraph[0]['a'].endpoint)) {
-        reachedNodes.add(stateMachineGraph[0]['a'].endpoint);
-        result.add('a');
-        bfsQueue.enqueue({ index: stateMachineGraph[0]['a'].endpoint, path: 'a' });
+    function go(stimulus, index, path) {
+        const endpoint = stateMachineGraph[index][stimulus].endpoint;
+        if (!reachedNodes.has(endpoint)) {
+            const newPath = `${path}${stimulus}`;
+            reachedNodes.add(endpoint);
+            result.push(newPath);
+            bfsQueue.enqueue({ index: endpoint, path: newPath });
+        }
     }
 
-    if (!reachedNodes.has(stateMachineGraph[0]['b'].endpoint)) {
-        reachedNodes.add(stateMachineGraph[0]['b'].endpoint);
-        result.add('b');
-        bfsQueue.enqueue({ index: stateMachineGraph[0]['b'].endpoint, path: 'b' });
-    }
-
-    while (result.size < stateMachineGraph.length && !bfsQueue.isEmpty()) {
-        const currentIndex = bfsQueue.peek()['index'];
-        const currentPath = bfsQueue.peek()['path'];
-
-        bfsQueue.dequeue();
-
-        if (!reachedNodes.has(stateMachineGraph[currentIndex]['a'].endpoint)) {
-            reachedNodes.add(stateMachineGraph[currentIndex]['a'].endpoint);
-            result.add(`${currentPath}a`);
-            bfsQueue.enqueue({ index: stateMachineGraph[currentIndex]['a'].endpoint, path: `${currentPath}a` });
-        }
-
-        if (!reachedNodes.has(stateMachineGraph[currentIndex]['b'].endpoint)) {
-            reachedNodes.add(stateMachineGraph[currentIndex]['b'].endpoint);
-            result.add(`${currentPath}b`);
-            bfsQueue.enqueue({ index: stateMachineGraph[currentIndex]['b'].endpoint, path: `${currentPath}b` });
-        }
+    while (result.length < stateMachineGraph.length && !bfsQueue.isEmpty()) {
+        const { index: currentIndex, path: currentPath } = bfsQueue.dequeue();
+        go('a', currentIndex, currentPath);
+        go('b', currentIndex, currentPath);
     }
 
     return result;

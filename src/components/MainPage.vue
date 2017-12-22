@@ -63,7 +63,7 @@
             </div>
             <div>
                 <b>Покрывающее множество:</b>
-                <span v-if="coveringSet.size === this.nodesNumber">{{formattedCoveringSet}}</span>
+                <span v-if="coveringSet.length === this.nodesNumber">{{formattedCoveringSet}}</span>
                 <span v-else>нет</span>
             </div>
         </div>
@@ -126,7 +126,7 @@ export default {
             return findCoveringSet(this.usedStateMachineGraph);
         },
         formattedCoveringSet() {
-            return `{${Array.from(this.coveringSet).join(', ')}}`;
+            return `{${this.coveringSet.join(', ')}}`;
             // console.log(this.coveringSet);
             // console.log(Array.prototype.join.call(this.coveringSet, ', '));
             // return Array.prototype.join.call(this.coveringSet, ', ');
