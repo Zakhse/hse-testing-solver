@@ -43,13 +43,25 @@
         </div>
         <div id="graph-results">
             <div>
-                Различающие последовательности:
+                <b>Различающие последовательности:</b>
                 <span v-if="determiningSequences.length">{{formattedDetermingSequences}}</span>
                 <span v-else>нет</span>
             </div>
             <div>
-                Характеризующие множества:
+                <b>Характеризующие множества:</b>
                 <span v-if="characterizingSets.length">{{formattedCharacterizingSets}}</span>
+                <span v-else>нет</span>
+            </div>
+
+            <div>
+                <b>Основное характеризующее множество (тупо самое первое в списке и самое короткое):</b>
+                <span v-if="characterizingSets.length">{{formattedMainCharacterizingSet}}</span>
+                <span v-else>нет</span>
+            </div>
+
+            <div>
+                <b>Покрывающее множество:</b>
+                <span v-if="coveringSet.size === this.stateMachineGraph.length">{{formattedCoveringSet}}</span>
                 <span v-else>нет</span>
             </div>
         </div>
@@ -61,7 +73,8 @@ import {
     computeReactionSequencesTable,
     findDeterminingSequence,
     computeCharacterizingSetTable,
-    findCharacterizingSets
+    findCharacterizingSets,
+    findCoveringSet
 } from '../assets/StateMachineTesting';
 
 
@@ -91,6 +104,18 @@ export default {
         },
         formattedCharacterizingSets() {
             return `${this.characterizingSets.map(set => `{${set[0]},${set[1]}}`).join(', ')}`;
+        },
+        formattedMainCharacterizingSet() {
+            return `{${this.characterizingSets[0][0]},${this.characterizingSets[0][1]}}`;
+        },
+        coveringSet() {
+            return findCoveringSet(this.stateMachineGraph);
+        },
+        formattedCoveringSet() {
+            return `{${Array.from(this.coveringSet).join(', ')}}`;
+            // console.log(this.coveringSet);
+            // console.log(Array.prototype.join.call(this.coveringSet, ', '));
+            // return Array.prototype.join.call(this.coveringSet, ', ');
         },
         stimuluses() {
             return ['a', 'b'];

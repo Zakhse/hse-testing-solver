@@ -14,6 +14,7 @@
     "dependencies": {
         "element-ui": "^2.0.8",
         "normalize.css": "^7.0.0",
+        "queue-fifo": "^0.2.4",
         "vue": "^2.5.2",
         "vue-router": "^3.0.1"
     },

@@ -1,3 +1,5 @@
+const Queue = require('queue-fifo');
+
 function printDirections(stateMachineGraph) {
     stateMachineGraph.forEach((direction, index) => {
         Object.keys(direction).forEach(stimulus => {
@@ -119,6 +121,46 @@ function findCharacterizingSets(characterizingSetTable) {
         new Set(characterizingSetTable.get(sequencesSet)).size === characterizingSetTable.get(sequencesSet).length);
 }
 
+function findCoveringSet(stateMachineGraph) {
+    const reachedNodes = new Set([0]);
+    const result = new Set(['ε']);
+
+    const bfsQueue = new Queue();
+
+    if (!reachedNodes.has(stateMachineGraph[0]['a'].endpoint)) {
+        reachedNodes.add(stateMachineGraph[0]['a'].endpoint);
+        result.add('a');
+        bfsQueue.enqueue({ index: stateMachineGraph[0]['a'].endpoint, path: 'a' });
+    }
+
+    if (!reachedNodes.has(stateMachineGraph[0]['b'].endpoint)) {
+        reachedNodes.add(stateMachineGraph[0]['b'].endpoint);
+        result.add('b');
+        bfsQueue.enqueue({ index: stateMachineGraph[0]['b'].endpoint, path: 'b' });
+    }
+
+    while (result.size < stateMachineGraph.length && !bfsQueue.isEmpty()) {
+        const currentIndex = bfsQueue.peek()['index'];
+        const currentPath = bfsQueue.peek()['path'];
+
+        bfsQueue.dequeue();
+
+        if (!reachedNodes.has(stateMachineGraph[currentIndex]['a'].endpoint)) {
+            reachedNodes.add(stateMachineGraph[currentIndex]['a'].endpoint);
+            result.add(`${currentPath}a`);
+            bfsQueue.enqueue({ index: stateMachineGraph[currentIndex]['a'].endpoint, path: `${currentPath}a` });
+        }
+
+        if (!reachedNodes.has(stateMachineGraph[currentIndex]['b'].endpoint)) {
+            reachedNodes.add(stateMachineGraph[currentIndex]['b'].endpoint);
+            result.add(`${currentPath}b`);
+            bfsQueue.enqueue({ index: stateMachineGraph[currentIndex]['b'].endpoint, path: `${currentPath}b` });
+        }
+    }
+
+    return result;
+}
+
 export {
     printDirections,
     generateStimulusSequences,
@@ -126,5 +168,6 @@ export {
     findDeterminingSequence,
     computeCharacterizingSetTable,
     getSequencesSets,
-    findCharacterizingSets
+    findCharacterizingSets,
+    findCoveringSet
 };
