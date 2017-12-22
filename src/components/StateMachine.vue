@@ -82,7 +82,7 @@ import {
 const MAX_NODES = 6;
 
 export default {
-    name: 'MainPage',
+    name: 'StateMachine',
     data() {
         return {
             nodesNumber: 4,

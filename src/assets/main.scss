@@ -1,0 +1,17 @@
+html {
+    min-height: 100%;
+    display: flex;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-height: 100%;
+}
