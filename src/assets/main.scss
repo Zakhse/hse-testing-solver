@@ -1,10 +1,16 @@
+@import '~normalize.css';
+
 html {
-    min-height: 100%;
+    min-height: 100vh;
     display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
     --main-color: #00b256;
 }
 
 body {
+    min-height: 100%;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -14,5 +20,4 @@ body {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    min-height: 100%;
 }

@@ -13,6 +13,7 @@
 
     #navigation_root {
         display: flex;
+        flex-shrink: 0;
         justify-content: flex-start;
         align-items: stretch;
         background-color: $main-color;
@@ -23,7 +24,9 @@
             align-items: center;
             padding-left: 5px;
             padding-right: 5px;
-
+            @media (max-width: 450px) {
+                font-size: 0.8em;
+            }
             &.brand-title {
                 font-weight: bold;
                 border-bottom: 3px solid $main-color;

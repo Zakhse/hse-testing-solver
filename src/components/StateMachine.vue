@@ -183,8 +183,7 @@ export default {
 </script>
 <style lang="scss">
     #state-machine_root {
-        margin-left: 20%;
-        margin-right: 20%;
+        margin: 7px 20% 7px 20%;
 
         @media (max-width: 750px) {
             margin-left: 10%;
