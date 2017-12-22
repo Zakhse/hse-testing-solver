@@ -7,8 +7,9 @@ import 'normalize.css';
 import App from './App';
 import router from './router';
 
-Vue.use(ElementUI);
+document.documentElement.style.setProperty('--main-color', `#${Math.random().toString(16).substr(-6)}`);
 
+Vue.use(ElementUI);
 Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
@@ -18,3 +19,4 @@ new Vue({
     template: '<App/>',
     components: { App }
 });
+
