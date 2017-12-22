@@ -1,4 +1,4 @@
-const Queue = require('queue-fifo');
+import Queue from 'queue-fifo';
 
 function printDirections(stateMachineGraph) {
     stateMachineGraph.forEach((direction, index) => {
