@@ -1,7 +1,12 @@
 <template>
     <div id="footer_root">
         <span>
-            Благодарности: <a href="https://vk.com/one_step_cl0ser">Екатерина</a>, <a href="https://vk.com/zakhse">Сергей</a>
+            Благодарности:
+            <template v-for="(collaborator, i) in collaborators">
+                <a :href="`https://vk.com/${collaborator.vkId}`">{{collaborator.name}}</a>
+                <template v-if="i !== collaborators.length - 1">, </template>
+            </template>
+            <!--<a href="https://vk.com/one_step_cl0ser">Екатерина</a>, <a href="https://vk.com/zakhse">Сергей</a>-->
         </span>
     </div>
 </template>
@@ -20,6 +25,20 @@
 </style>
 <script>
 export default {
-    name: 'Footer'
+    name: 'Footer',
+    data() {
+        return {
+            collaborators: [{
+                name: 'Екатерина',
+                vkId: 'one_step_cl0ser'
+            }, {
+                name: 'Илья',
+                vkId: 'isgulkov'
+            }, {
+                name: 'Сергей',
+                vkId: 'zakhse'
+            }]
+        };
+    }
 };
 </script>

@@ -5,6 +5,7 @@
         </span>
         <nav-lnk class="navigation-item" text="Автомат" route-name="StateMachine"></nav-lnk>
         <nav-lnk class="navigation-item" text="Ветвления" route-name="Branches"></nav-lnk>
+        <nav-lnk class="navigation-item" text="Грамматика" route-name="Regex"></nav-lnk>
     </nav>
 </template>
 <style lang="scss" scoped>

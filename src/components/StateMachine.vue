@@ -1,5 +1,5 @@
 <template>
-    <div id="main-page_root">
+    <div id="state-machine_root">
         <el-button @click="fillGraphDebug">Заполнить граф (отладка)</el-button>
         <div id="graph-input">
             <el-input-number id="nodes-number-input"
@@ -182,7 +182,7 @@ export default {
 };
 </script>
 <style lang="scss">
-    #main-page_root {
+    #state-machine_root {
         margin-left: 20%;
         margin-right: 20%;
 
@@ -228,6 +228,7 @@ export default {
             text-align: center;
             td, th {
                 padding: 3px;
+                text-align: center;
             }
         }
     }
