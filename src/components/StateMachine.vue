@@ -66,6 +66,26 @@
                 <span v-if="coveringSet.length === this.nodesNumber">{{formattedCoveringSet}}</span>
                 <span v-else>нет</span>
             </div>
+            <div>
+                <b>Идентифицирующие множества:</b>
+                <table id="identification-sets-table" cellspacing="0" border bordercolor="black">
+                    <tr>
+                        <th v-for="nodeNumber in nodesNumber">
+                            {{nodeNumber-1}}
+                        </th>
+                    </tr>
+                    <tr>
+                        <td v-for="nodeNumber in nodesNumber">
+                            <template v-if="identificationSets[nodeNumber-1]">
+                                {{'{' + identificationSets[nodeNumber-1].join(', ') + '}'}}
+                            </template>
+                            <template v-else>
+                                -
+                            </template>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </template>
@@ -76,8 +96,9 @@ import {
     findDeterminingSequences,
     computeCharacterizingSetTable,
     findCharacterizingSets,
-    findCoveringSet
-} from '../assets/StateMachineTesting';
+    findCoveringSet,
+    findIdentificationSets
+} from '../assets/js/StateMachine/StateMachineTesting';
 
 const MAX_NODES = 6;
 
@@ -131,6 +152,9 @@ export default {
             // console.log(Array.prototype.join.call(this.coveringSet, ', '));
             // return Array.prototype.join.call(this.coveringSet, ', ');
         },
+        identificationSets() {
+            return findIdentificationSets(this.reactionSequences, this.setsSequences, this.characterizingSets[0]);
+        },
         stimuluses() {
             return ['a', 'b'];
         }
@@ -159,6 +183,19 @@ export default {
 </script>
 <style lang="scss">
     #main-page_root {
+        margin-left: 20%;
+        margin-right: 20%;
+
+        @media (max-width: 750px) {
+            margin-left: 10%;
+            margin-right: 10%;
+        }
+
+        @media (max-width: 450px) {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
         #invalid-graph {
             color: red;
             font-size: 1.5em;
@@ -179,6 +216,15 @@ export default {
 
     #graph-input {
         #graph-input_routes {
+            text-align: center;
+            td, th {
+                padding: 3px;
+            }
+        }
+    }
+
+    #graph-results {
+        #identification-sets-table {
             text-align: center;
             td, th {
                 padding: 3px;

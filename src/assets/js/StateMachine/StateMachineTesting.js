@@ -144,10 +144,51 @@ function findCoveringSet(stateMachineGraph) {
     return result;
 }
 
+/* Example:
+ * {
+ * 0: ['b', 'aa'],
+ * 1: ['aa'],
+ * 2: ['aa'],
+ * 3: ['b']
+ * }
+ */
+function findIdentificationSets(reactionSequencesTable, characterizingSetTable, characterizingSet) {
+    function countInArray(el, arr) {
+        let counter = 0;
+        let i = arr.length;
+        while (i--)
+            if (arr[i] === el)
+                counter++;
+        return counter;
+    }
+
+    if (!characterizingSet || characterizingSet.length !== 2)
+        return [];
+    const reactionsFor1Seq = reactionSequencesTable[characterizingSet[0]];
+    const reactionsFor2Seq = reactionSequencesTable[characterizingSet[1]];
+    const reactionsForSet = characterizingSetTable.get(characterizingSet);
+
+    if (!reactionsFor1Seq || !reactionsFor1Seq || !reactionsForSet)
+        return [];
+    console.log('reactions', reactionsForSet, reactionsFor1Seq, reactionsFor2Seq);
+
+    let i = reactionsForSet.length;
+    const res = Array(i);
+    while (i--)
+        if (countInArray(reactionsFor1Seq[i], reactionsFor1Seq) === 1)
+            res[i] = [characterizingSet[0]];
+        else if (countInArray(reactionsFor2Seq[i], reactionsFor2Seq) === 1)
+            res[i] = [characterizingSet[1]];
+        else
+            res[i] = characterizingSet;
+    return res;
+}
+
 export {
     computeReactionSequencesTable,
     findDeterminingSequences,
     computeCharacterizingSetTable,
     findCharacterizingSets,
-    findCoveringSet
+    findCoveringSet,
+    findIdentificationSets
 };
