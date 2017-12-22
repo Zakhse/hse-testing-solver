@@ -73,7 +73,7 @@
 <script>
 import {
     computeReactionSequencesTable,
-    findDeterminingSequence,
+    findDeterminingSequences,
     computeCharacterizingSetTable,
     findCharacterizingSets,
     findCoveringSet
@@ -105,7 +105,7 @@ export default {
             return computeReactionSequencesTable(this.usedStateMachineGraph);
         },
         determiningSequences() {
-            return findDeterminingSequence(this.reactionSequences);
+            return findDeterminingSequences(this.reactionSequences);
         },
         formattedDetermingSequences() {
             return `${this.determiningSequences.join(', ')}`;

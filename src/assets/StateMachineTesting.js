@@ -9,50 +9,49 @@ function printDirections(stateMachineGraph) {
     });
 }
 
-function generateStimulusSequences(maxLength) {
-    const stimulusSequencesArr = [];
-
-    function addStimuluses(stimulusSequence) {
-        stimulusSequencesArr.push(stimulusSequence);
-
-        if (stimulusSequence.length >= maxLength)
-            return;
-
-        addStimuluses(`${stimulusSequence}a`);
-        addStimuluses(`${stimulusSequence}b`);
-    }
-
-    addStimuluses('a');
-    addStimuluses('b');
-    return stimulusSequencesArr.sort((a, b) => {
-        if (a.length > b.length)
-            return 1;
-        if (a.length < b.length)
-            return -1;
-        if (a > b)
-            return 1;
-        if (a < b)
-            return -1;
-        return 0;
-    });
-}
-
-function computeReactionSequence(stateMachineGraph, nodeIndex, stimulusSequence) {
-    let res = '';
-    while (stimulusSequence !== '') {
-        const step = stateMachineGraph[nodeIndex][stimulusSequence[0]];
-        res += step.reaction;
-        nodeIndex = step.endpoint;
-        stimulusSequence = stimulusSequence.substring(1);
-    }
-    return res;
-}
-
-function computeReactionSequences(stateMachineGraph, stimulusSequence) {
-    return stateMachineGraph.map((el, index) => computeReactionSequence(stateMachineGraph, index, stimulusSequence));
-}
-
 function computeReactionSequencesTable(stateMachineGraph) {
+    function computeReactionSequences(stateMachineGraph, stimulusSequence) {
+        function computeReactionSequence(stateMachineGraph, nodeIndex, stimulusSequence) {
+            let res = '';
+            while (stimulusSequence !== '') {
+                const step = stateMachineGraph[nodeIndex][stimulusSequence[0]];
+                res += step.reaction;
+                nodeIndex = step.endpoint;
+                stimulusSequence = stimulusSequence.substring(1);
+            }
+            return res;
+        }
+
+        return stateMachineGraph.map((el, index) =>
+            computeReactionSequence(stateMachineGraph, index, stimulusSequence));
+    }
+
+    function generateStimulusSequences(maxLength) {
+        const stimulusSequencesArr = [];
+
+        function addStimuluses(stimulusSequence) {
+            stimulusSequencesArr.push(stimulusSequence);
+            if (stimulusSequence.length >= maxLength)
+                return;
+            addStimuluses(`${stimulusSequence}a`);
+            addStimuluses(`${stimulusSequence}b`);
+        }
+
+        addStimuluses('a');
+        addStimuluses('b');
+        return stimulusSequencesArr.sort((a, b) => {
+            if (a.length > b.length)
+                return 1;
+            if (a.length < b.length)
+                return -1;
+            if (a > b)
+                return 1;
+            if (a < b)
+                return -1;
+            return 0;
+        });
+    }
+
     const stimulusSequences = generateStimulusSequences(stateMachineGraph.length);
     const res = {};
     stimulusSequences.forEach(stimulusSequence => {
@@ -61,7 +60,7 @@ function computeReactionSequencesTable(stateMachineGraph) {
     return res;
 }
 
-function findDeterminingSequence(reactionSequencesTable) {
+function findDeterminingSequences(reactionSequencesTable) {
     return Object.keys(reactionSequencesTable)
     .filter(stimulusSequence =>
         new Set(reactionSequencesTable[stimulusSequence]).size === reactionSequencesTable[stimulusSequence].length);
@@ -83,41 +82,40 @@ function computeCharacterizingSetTable(reactionSequencesTable) {
     return res;
 }
 
-function getSequencesSets(characterizingSetTable) {
-    return Array.from((characterizingSetTable.keys())).sort((combA, combB) => {
-        const a1 = combA[0];
-        const a2 = combA[1];
-        const b1 = combB[0];
-        const b2 = combB[1];
-
-        const minA = Math.min(a1.length, a2.length);
-        const minB = Math.min(b1.length, b2.length);
-        const maxA = Math.max(a1.length, a2.length);
-        const maxB = Math.max(b1.length, b2.length);
-
-        if (maxA > maxB)
-            return 1;
-        if (maxA < maxB)
-            return -1;
-        if (minA > minB)
-            return 1;
-        if (minA < minB)
-            return -1;
-        if (a1 > b1)
-            return 1;
-        if (a1 < b1)
-            return -1;
-        if (a2 > b2)
-            return 1;
-        if (a2 < b2)
-            return -1;
-        return 0;
-    });
-}
-
 function findCharacterizingSets(characterizingSetTable) {
-    return getSequencesSets(characterizingSetTable)
-    .filter(sequencesSet =>
+    function getSequencesSets(characterizingSetTable) {
+        return Array.from((characterizingSetTable.keys())).sort((combA, combB) => {
+            const a1 = combA[0];
+            const a2 = combA[1];
+            const b1 = combB[0];
+            const b2 = combB[1];
+
+            const minA = Math.min(a1.length, a2.length);
+            const minB = Math.min(b1.length, b2.length);
+            const maxA = Math.max(a1.length, a2.length);
+            const maxB = Math.max(b1.length, b2.length);
+
+            if (maxA > maxB)
+                return 1;
+            if (maxA < maxB)
+                return -1;
+            if (minA > minB)
+                return 1;
+            if (minA < minB)
+                return -1;
+            if (a1 > b1)
+                return 1;
+            if (a1 < b1)
+                return -1;
+            if (a2 > b2)
+                return 1;
+            if (a2 < b2)
+                return -1;
+            return 0;
+        });
+    }
+
+    return getSequencesSets(characterizingSetTable).filter(sequencesSet =>
         new Set(characterizingSetTable.get(sequencesSet)).size === characterizingSetTable.get(sequencesSet).length);
 }
 
@@ -147,12 +145,9 @@ function findCoveringSet(stateMachineGraph) {
 }
 
 export {
-    printDirections,
-    generateStimulusSequences,
     computeReactionSequencesTable,
-    findDeterminingSequence,
+    findDeterminingSequences,
     computeCharacterizingSetTable,
-    getSequencesSets,
     findCharacterizingSets,
     findCoveringSet
 };
