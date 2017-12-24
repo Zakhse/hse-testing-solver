@@ -127,6 +127,8 @@ function findCoveringSet(stateMachineGraph) {
     bfsQueue.enqueue({ index: 0, path: '' });
     const routes = {};
 
+    routes[0] = '';
+
     function go(stimulus, index, path) {
         const endpoint = stateMachineGraph[index][stimulus].endpoint;
         if (!reachedNodes.has(endpoint)) {
@@ -143,8 +145,6 @@ function findCoveringSet(stateMachineGraph) {
         go('a', currentIndex, currentPath);
         go('b', currentIndex, currentPath);
     }
-
-    // console.log(routes);
 
     return { coveringSet: result, routes };
 }
@@ -204,15 +204,19 @@ function findWpTests(stateMachineGraph, coveringSet, characterizingSets, identif
     let res = [];
     const coveredDirections = new Set();
 
-    function getCovered() { // возвращает покрытые покрывающим множеством переходы
+    function addCovered() { // возвращает покрытые покрывающим множеством переходы
         for (let i = 1; i < coveringSet.length; ++i) {
             const currentPath = coveringSet[i];
             let currentNode = 0;
+
             for (let j = 0; j < currentPath.length; ++j) {
                 const currentBranch = currentPath[j];
                 const currentDirection = currentNode.toString() + currentBranch;
-                if (!coveredDirections.has(currentDirection))
+
+                if (!coveredDirections.has(currentDirection)) {
                     coveredDirections.add(currentDirection);
+                    console.log('ДОБАВЛЯЕМ', currentDirection);
+                }
 
                 currentNode = stateMachineGraph[currentNode][currentBranch].endpoint;
             }
@@ -220,13 +224,17 @@ function findWpTests(stateMachineGraph, coveringSet, characterizingSets, identif
     }
 
     function go(direction, startpoint, endpoint, stimulus) { // если переход не покрыт, покрывает и добавляет для него тест
+        console.log('direction', direction, 'start point', startpoint, 'endpoint', endpoint, 'stimulus', stimulus);
+
         if (!coveredDirections.has(direction)) {
             coveredDirections.add(direction);
             res = res.concat(identificationSets[endpoint].map(set => `R${routes[startpoint]}${stimulus}${set}`));
         }
     }
 
-    coveredDirections.add(getCovered());
+    addCovered();
+
+    console.log('covered directions', Array.from(coveredDirections));
 
     for (let i = 0; i < coveringSet.length; ++i) // делаем первый шаг алгоритма RCW
         for (let j = 0; j < characterizingSets.length; ++j)

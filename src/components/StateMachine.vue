@@ -97,7 +97,7 @@
                 <span v-else>нет</span>
             </div>
             <div>
-                <b>Тесты по укороченному Wp-методу:</b>
+                <b>Сокращенный тест по Wp-методу:</b>
                 <span v-if="coveringSet.length === this.nodesNumber && characterizingSets.length">{{formattedWpTestsCut}}</span>
                 <span v-else>нет</span>
             </div>
@@ -199,7 +199,7 @@
             }
         },
         methods: {
-            fillGraphDebug2() {
+            fillGraphDebug() {
                 this.stateMachineGraph[0]['a'].reaction = 'x';
                 this.stateMachineGraph[0]['a'].endpoint = 0;
                 this.stateMachineGraph[0]['b'].reaction = 'x';
@@ -218,7 +218,7 @@
                 this.stateMachineGraph[3]['b'].endpoint = 1;
             },
 
-            fillGraphDebug() {
+            fillGraphDebug3() {
                 this.stateMachineGraph[0]['a'].reaction = 'x';
                 this.stateMachineGraph[0]['a'].endpoint = 1;
                 this.stateMachineGraph[0]['b'].reaction = 'x';

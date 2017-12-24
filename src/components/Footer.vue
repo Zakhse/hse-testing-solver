@@ -7,7 +7,6 @@
                 <a :href="`https://vk.com/${collaborator.vkId}`">{{collaborator.name}}</a>
                 <template v-if="i !== collaborators.length - 1">, </template>
             </template>
-            <!--<a href="https://vk.com/one_step_cl0ser">Екатерина</a>, <a href="https://vk.com/zakhse">Сергей</a>-->
         </span>
     </div>
 </template>
@@ -42,7 +41,19 @@ export default {
             }, {
                 name: 'Сергей',
                 vkId: 'zakhse'
-            }]
+            }, {
+                name: 'Саша',
+                vkId: 'id33861656'
+            },
+            {
+                name: 'Рома',
+                vkId: 'romikabi'
+            },
+            {
+                name: 'Кэр',
+                vkId: 'heykarolina'
+            }
+            ]
         };
     }
 };
