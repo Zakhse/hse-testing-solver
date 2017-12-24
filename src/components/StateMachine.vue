@@ -1,6 +1,7 @@
 <template>
     <div id="state-machine_root">
-        <el-button @click="fillGraphDebug">Заполнить граф (отладка)</el-button>
+        <el-button @click="fillGraphDebug">Заполнить граф (отладка1)</el-button>
+        <el-button @click="fillGraphDebug2">Заполнить граф (отладка2)</el-button>
         <div id="graph-input">
             <el-input-number id="nodes-number-input"
                              v-model="nodesNumber"
@@ -48,22 +49,30 @@
         <div id="graph-results" v-if="usedGraphIsValid">
             <div>
                 <b>Различающие последовательности:</b>
-                <span v-if="determiningSequences.length">{{formattedDetermingSequences}}</span>
+                <span v-if="determiningSequences.length">
+                    {{formattedDetermingSequences}}
+                </span>
                 <span v-else>нет</span>
             </div>
             <div>
                 <b>Характеризующие множества (первые 10):</b>
-                <span v-if="characterizingSets.length">{{formattedCharacterizingSets}}</span>
+                <span v-if="characterizingSets.length">
+                    {{formattedCharacterizingSets}}
+                </span>
                 <span v-else>нет</span>
             </div>
             <div>
                 <b>Основное характеризующее множество (тупо самое первое в списке и самое короткое):</b>
-                <span v-if="characterizingSets.length">{{formattedMainCharacterizingSet}}</span>
+                <span v-if="characterizingSets.length">
+                    {{formattedMainCharacterizingSet}}
+                </span>
                 <span v-else>нет</span>
             </div>
             <div>
                 <b>Покрывающее множество:</b>
-                <span v-if="coveringSet.length === this.nodesNumber">{{formattedCoveringSet}}</span>
+                <span v-if="coveringSet.length === this.nodesNumber">
+                    {{formattedCoveringSet}}
+                </span>
                 <span v-else>нет</span>
             </div>
             <div>
@@ -88,17 +97,23 @@
             </div>
             <div>
                 <b>Тесты по W-методу:</b>
-                <span v-if="coveringSet.length === this.nodesNumber && characterizingSets.length">{{wTests}}</span>
+                <span v-if="coveringSet.length === this.nodesNumber && characterizingSets.length">
+                    {{wTests}}
+                </span>
                 <span v-else>нет</span>
             </div>
             <div>
                 <b>Тесты по Wp-методу:</b>
-                <span v-if="coveringSet.length === this.nodesNumber && characterizingSets.length">{{formattedWpTests}}</span>
+                <span v-if="coveringSet.length === this.nodesNumber && characterizingSets.length">
+                    {{formattedWpTests}}
+                </span>
                 <span v-else>нет</span>
             </div>
             <div>
                 <b>Сокращенный тест по Wp-методу:</b>
-                <span v-if="coveringSet.length === this.nodesNumber && characterizingSets.length">{{formattedWpTestsCut}}</span>
+                <span v-if="coveringSet.length === this.nodesNumber && characterizingSets.length">
+                    {{formattedWpTestsCut}}
+                </span>
                 <span v-else>нет</span>
             </div>
         </div>
@@ -106,138 +121,132 @@
 </template>
 
 <script>
-    import {
-        computeReactionSequencesTable,
-        findDeterminingSequences,
-        computeCharacterizingSetTable,
-        findCharacterizingSets,
-        findCoveringSet,
-        findIdentificationSets,
-        findWtests,
-        findWpTests
-    } from '../assets/js/StateMachine/StateMachineTesting';
+import {
+    computeReactionSequencesTable,
+    findDeterminingSequences,
+    computeCharacterizingSetTable,
+    findCharacterizingSets,
+    findCoveringSet,
+    findIdentificationSets,
+    findWtests,
+    findWpTests
+} from '../assets/js/StateMachine/StateMachineTesting';
 
-    const MAX_NODES = 6;
+const MAX_NODES = 6;
 
-    export default {
-        name: 'StateMachine',
-        data() {
-            return {
-                nodesNumber: 4,
-                MAX_NODES,
-                stateMachineGraph: Array(MAX_NODES).fill(null).map(el => ({
-                    'a': { reaction: 'x', endpoint: 0 },
-                    'b': { reaction: 'x', endpoint: 0 }
-                }))
-            };
+export default {
+    name: 'StateMachine',
+    data() {
+        return {
+            nodesNumber: 4,
+            MAX_NODES,
+            stateMachineGraph: Array(MAX_NODES).fill(null).map(el => ({
+                'a': { reaction: 'x', endpoint: 0 },
+                'b': { reaction: 'x', endpoint: 0 }
+            }))
+        };
+    },
+    computed: {
+        usedStateMachineGraph() {
+            return this.stateMachineGraph.slice(0, this.nodesNumber);
         },
-        computed: {
-            usedStateMachineGraph() {
-                return this.stateMachineGraph.slice(0, this.nodesNumber);
-            },
-            usedGraphIsValid() {
-                return this.usedStateMachineGraph.every(node =>
-                    ['a', 'b'].every(stimulus => node[stimulus].endpoint < this.nodesNumber));
-            },
-            reactionSequences() {
-                return computeReactionSequencesTable(this.usedStateMachineGraph);
-            },
-            determiningSequences() {
-                return findDeterminingSequences(this.reactionSequences);
-            },
-            formattedDetermingSequences() {
-                return `${this.determiningSequences.join(', ')}`;
-            },
-            setsSequences() {
-                return computeCharacterizingSetTable(this.reactionSequences);
-            },
-            characterizingSets() {
-                return findCharacterizingSets(this.setsSequences);
-            },
-            formattedCharacterizingSets() {
-                return `${this.characterizingSets.slice(0, 10).map(set => `{${set[0]},${set[1]}}`).join(', ')}`;
-            },
-            formattedMainCharacterizingSet() {
-                return `{${this.characterizingSets[0][0]},${this.characterizingSets[0][1]}}`;
-            },
-            coveringSetsAndRoutes() {
-                return findCoveringSet(this.usedStateMachineGraph);
-            },
-            coveringSet() {
-                return this.coveringSetsAndRoutes.coveringSet;
-            },
-            coveringRoutes() {
-                return this.coveringSetsAndRoutes.routes;
-            },
-            formattedCoveringSet() {
-                return `{${this.coveringSet.join(', ')}}`;
-            },
-            formattedWpTests() {
-                return this.wpTests.join(' ');
-            },
-            formattedWpTestsCut() {
-                const wpTestsCut = [];
-                this.wpTests.map(test => {
-                    if (!this.wpTests.some(comparedTest => test !== comparedTest && comparedTest.startsWith(test)))
-                        wpTestsCut.push(test);
-                });
-                return wpTestsCut.join(' ');
-            },
-            identificationSets() {
-                return findIdentificationSets(this.reactionSequences, this.setsSequences, this.characterizingSets[0]);
-            },
-            stimuluses() {
-                return ['a', 'b'];
-            },
-            wTests() {
-                const tests = findWtests(this.coveringSet, this.stimuluses, this.characterizingSets[0]);
-                return tests.join(' ');
-            },
-            wpTests() {
-                return findWpTests(this.usedStateMachineGraph, this.coveringSet, this.characterizingSets[0],
-                    this.identificationSets, this.coveringRoutes);
-            }
+        usedGraphIsValid() {
+            return this.usedStateMachineGraph.every(node =>
+                ['a', 'b'].every(stimulus => node[stimulus].endpoint < this.nodesNumber));
         },
-        methods: {
-            fillGraphDebug() {
-                this.stateMachineGraph[0]['a'].reaction = 'x';
-                this.stateMachineGraph[0]['a'].endpoint = 0;
-                this.stateMachineGraph[0]['b'].reaction = 'x';
-                this.stateMachineGraph[0]['b'].endpoint = 1;
-                this.stateMachineGraph[1]['a'].reaction = 'y';
-                this.stateMachineGraph[1]['a'].endpoint = 0;
-                this.stateMachineGraph[1]['b'].reaction = 'x';
-                this.stateMachineGraph[1]['b'].endpoint = 2;
-                this.stateMachineGraph[2]['a'].reaction = 'y';
-                this.stateMachineGraph[2]['a'].endpoint = 3;
-                this.stateMachineGraph[2]['b'].reaction = 'y';
-                this.stateMachineGraph[2]['b'].endpoint = 2;
-                this.stateMachineGraph[3]['a'].reaction = 'x';
-                this.stateMachineGraph[3]['a'].endpoint = 1;
-                this.stateMachineGraph[3]['b'].reaction = 'x';
-                this.stateMachineGraph[3]['b'].endpoint = 1;
-            },
-
-            fillGraphDebug3() {
-                this.stateMachineGraph[0]['a'].reaction = 'x';
-                this.stateMachineGraph[0]['a'].endpoint = 1;
-                this.stateMachineGraph[0]['b'].reaction = 'x';
-                this.stateMachineGraph[0]['b'].endpoint = 3;
-                this.stateMachineGraph[1]['a'].reaction = 'x';
-                this.stateMachineGraph[1]['a'].endpoint = 2;
-                this.stateMachineGraph[1]['b'].reaction = 'x';
-                this.stateMachineGraph[1]['b'].endpoint = 3;
-                this.stateMachineGraph[2]['a'].reaction = 'y';
-                this.stateMachineGraph[2]['a'].endpoint = 0;
-                this.stateMachineGraph[2]['b'].reaction = 'x';
-                this.stateMachineGraph[2]['b'].endpoint = 3;
-                this.stateMachineGraph[3]['a'].reaction = 'x';
-                this.stateMachineGraph[3]['a'].endpoint = 0;
-                this.stateMachineGraph[3]['b'].reaction = 'y';
-                this.stateMachineGraph[3]['b'].endpoint = 2;
-            }
+        reactionSequences() {
+            return computeReactionSequencesTable(this.usedStateMachineGraph);
+        },
+        determiningSequences() {
+            return findDeterminingSequences(this.reactionSequences);
+        },
+        formattedDetermingSequences() {
+            return `${this.determiningSequences.join(', ')}`;
+        },
+        setsSequences() {
+            return computeCharacterizingSetTable(this.reactionSequences);
+        },
+        characterizingSets() {
+            return findCharacterizingSets(this.setsSequences);
+        },
+        formattedCharacterizingSets() {
+            return `${this.characterizingSets.slice(0, 10).map(set => `{${set[0]},${set[1]}}`).join(', ')}`;
+        },
+        formattedMainCharacterizingSet() {
+            return `{${this.characterizingSets[0][0]},${this.characterizingSets[0][1]}}`;
+        },
+        coveringSetsAndRoutes() {
+            return findCoveringSet(this.usedStateMachineGraph);
+        },
+        coveringSet() {
+            return this.coveringSetsAndRoutes.coveringSet;
+        },
+        coveringRoutes() {
+            return this.coveringSetsAndRoutes.routes;
+        },
+        formattedCoveringSet() {
+            return `{${this.coveringSet.join(', ')}}`;
+        },
+        formattedWpTests() {
+            return this.wpTests.join(' ');
+        },
+        formattedWpTestsCut() {
+            return this.wpTests.filter(test => this.wpTests.every(comparedTest =>
+                test === comparedTest || !comparedTest.startsWith(test))).join(' ');
+        },
+        identificationSets() {
+            return findIdentificationSets(this.reactionSequences, this.setsSequences, this.characterizingSets[0]);
+        },
+        stimuluses() {
+            return ['a', 'b'];
+        },
+        wTests() {
+            return findWtests(this.coveringSet, this.stimuluses, this.characterizingSets[0]).join(' ');
+        },
+        wpTests() {
+            return findWpTests(this.usedStateMachineGraph, this.coveringSet, this.characterizingSets[0],
+                this.identificationSets, this.coveringRoutes);
         }
-    };
+    },
+    methods: {
+        fillGraphDebug() {
+            this.stateMachineGraph[0]['a'].reaction = 'x';
+            this.stateMachineGraph[0]['a'].endpoint = 0;
+            this.stateMachineGraph[0]['b'].reaction = 'x';
+            this.stateMachineGraph[0]['b'].endpoint = 1;
+            this.stateMachineGraph[1]['a'].reaction = 'y';
+            this.stateMachineGraph[1]['a'].endpoint = 0;
+            this.stateMachineGraph[1]['b'].reaction = 'x';
+            this.stateMachineGraph[1]['b'].endpoint = 2;
+            this.stateMachineGraph[2]['a'].reaction = 'y';
+            this.stateMachineGraph[2]['a'].endpoint = 3;
+            this.stateMachineGraph[2]['b'].reaction = 'y';
+            this.stateMachineGraph[2]['b'].endpoint = 2;
+            this.stateMachineGraph[3]['a'].reaction = 'x';
+            this.stateMachineGraph[3]['a'].endpoint = 1;
+            this.stateMachineGraph[3]['b'].reaction = 'x';
+            this.stateMachineGraph[3]['b'].endpoint = 1;
+        },
+        fillGraphDebug2() {
+            this.stateMachineGraph[0]['a'].reaction = 'x';
+            this.stateMachineGraph[0]['a'].endpoint = 1;
+            this.stateMachineGraph[0]['b'].reaction = 'x';
+            this.stateMachineGraph[0]['b'].endpoint = 3;
+            this.stateMachineGraph[1]['a'].reaction = 'x';
+            this.stateMachineGraph[1]['a'].endpoint = 2;
+            this.stateMachineGraph[1]['b'].reaction = 'x';
+            this.stateMachineGraph[1]['b'].endpoint = 3;
+            this.stateMachineGraph[2]['a'].reaction = 'y';
+            this.stateMachineGraph[2]['a'].endpoint = 0;
+            this.stateMachineGraph[2]['b'].reaction = 'x';
+            this.stateMachineGraph[2]['b'].endpoint = 3;
+            this.stateMachineGraph[3]['a'].reaction = 'x';
+            this.stateMachineGraph[3]['a'].endpoint = 0;
+            this.stateMachineGraph[3]['b'].reaction = 'y';
+            this.stateMachineGraph[3]['b'].endpoint = 2;
+        }
+    }
+};
 </script>
 <style lang="scss">
     #state-machine_root {
