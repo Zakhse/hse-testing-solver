@@ -62,8 +62,8 @@ function computeReactionSequencesTable(stateMachineGraph) {
 
 function findDeterminingSequences(reactionSequencesTable) {
     return Object.keys(reactionSequencesTable)
-    .filter(stimulusSequence =>
-        new Set(reactionSequencesTable[stimulusSequence]).size === reactionSequencesTable[stimulusSequence].length);
+        .filter(stimulusSequence =>
+            new Set(reactionSequencesTable[stimulusSequence]).size === reactionSequencesTable[stimulusSequence].length);
 }
 
 function computeCharacterizingSetTable(reactionSequencesTable) {
@@ -79,6 +79,7 @@ function computeCharacterizingSetTable(reactionSequencesTable) {
             res.set([stimulusSequenceA, stimulusSequenceB],
                 reactionSequenceA.map((el, index) => el + reactionSequenceB[index]));
         }
+
     return res;
 }
 
@@ -124,6 +125,7 @@ function findCoveringSet(stateMachineGraph) {
     const result = ['ε'];
     const bfsQueue = new Queue();
     bfsQueue.enqueue({ index: 0, path: '' });
+    const routes = {};
 
     function go(stimulus, index, path) {
         const endpoint = stateMachineGraph[index][stimulus].endpoint;
@@ -131,6 +133,7 @@ function findCoveringSet(stateMachineGraph) {
             const newPath = `${path}${stimulus}`;
             reachedNodes.add(endpoint);
             result.push(newPath);
+            routes[endpoint] = newPath;
             bfsQueue.enqueue({ index: endpoint, path: newPath });
         }
     }
@@ -141,7 +144,9 @@ function findCoveringSet(stateMachineGraph) {
         go('b', currentIndex, currentPath);
     }
 
-    return result;
+    // console.log(routes);
+
+    return { coveringSet: result, routes };
 }
 
 /* Example:
@@ -184,11 +189,68 @@ function findIdentificationSets(reactionSequencesTable, characterizingSetTable, 
     return res;
 }
 
+function findWtests(coveringSet, stimuluses, characterizingSets) {
+    const res = [];
+
+    for (let i = 0; i < coveringSet.length; ++i)
+        for (let j = 0; j < stimuluses.length; ++j)
+            for (let k = 0; k < characterizingSets.length; ++k)
+                res.push(`R${coveringSet[i] === 'ε' ? '' : coveringSet[i]}${stimuluses[j]}${characterizingSets[k]}`);
+
+    return res;
+}
+
+function findWpTests(stateMachineGraph, coveringSet, characterizingSets, identificationSets, routes) {
+    let res = [];
+    const coveredDirections = new Set();
+
+    function getCovered() { // возвращает покрытые покрывающим множеством переходы
+        for (let i = 1; i < coveringSet.length; ++i) {
+            const currentPath = coveringSet[i];
+            let currentNode = 0;
+            for (let j = 0; j < currentPath.length; ++j) {
+                const currentBranch = currentPath[j];
+                const currentDirection = currentNode.toString() + currentBranch;
+                if (!coveredDirections.has(currentDirection))
+                    coveredDirections.add(currentDirection);
+
+                currentNode = stateMachineGraph[currentNode][currentBranch].endpoint;
+            }
+        }
+    }
+
+    function go(direction, startpoint, endpoint, stimulus) { // если переход не покрыт, покрывает и добавляет для него тест
+        if (!coveredDirections.has(direction)) {
+            coveredDirections.add(direction);
+            res = res.concat(identificationSets[endpoint].map(set => `R${routes[startpoint]}${stimulus}${set}`));
+        }
+    }
+
+    coveredDirections.add(getCovered());
+
+    for (let i = 0; i < coveringSet.length; ++i) // делаем первый шаг алгоритма RCW
+        for (let j = 0; j < characterizingSets.length; ++j)
+            res.push(`R${coveringSet[i] === 'ε' ? '' : coveringSet[i]}${characterizingSets[j]}`);
+
+    for (let i = 0; i < stateMachineGraph.length; ++i) { // делаем второй шаг алгоритма RCiAiWi
+        const nextDirectionA = `${i.toString()}a`;
+        const nextDirectionB = `${i.toString()}b`;
+        const [endpointA, endpointB] = [stateMachineGraph[i]['a'].endpoint, stateMachineGraph[i]['b'].endpoint];
+
+        go(nextDirectionA, i, endpointA, 'a');
+        go(nextDirectionB, i, endpointB, 'b');
+    }
+
+    return res;
+}
+
 export {
     computeReactionSequencesTable,
     findDeterminingSequences,
     computeCharacterizingSetTable,
     findCharacterizingSets,
     findCoveringSet,
-    findIdentificationSets
+    findIdentificationSets,
+    findWtests,
+    findWpTests
 };

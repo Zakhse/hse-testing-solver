@@ -1,5 +1,6 @@
 <template>
     <div id="footer_root">
+        <img id="coolyamin" src="https://image.ibb.co/daFPh6/deal.png">
         <span>
             Благодарности:
             <template v-for="(collaborator, i) in collaborators">
@@ -21,6 +22,10 @@
         background-color: $main-color;
         min-height: 3em;
         margin-top: auto;
+    }
+
+    #coolyamin {
+        margin: 10px 30px 10px 0;
     }
 </style>
 <script>
