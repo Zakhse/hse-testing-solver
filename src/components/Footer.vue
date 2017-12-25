@@ -27,6 +27,7 @@
         min-height: 3em;
         margin-top: auto;
         font-size: 1.2em;
+        font-weight: 100;
         line-height: 1.7em;
         @media (max-width: 750px) {
             font-size: 1em;
@@ -34,11 +35,26 @@
         @media (max-width: 450px) {
             font-size: 0.9em;
         }
+
+        a {
+            color: white;
+            transition-property: color;
+            transition-duration: 0.5s;
+
+            &:hover {
+                color: rgba(255, 255, 255, 0.7);
+                transition-property: color;
+                transition-duration: 0.5s;
+            }
+        }
+
     }
 
     #coolyamin {
         margin: 10px 30px 10px 0;
     }
+
+
 </style>
 <script>
 export default {

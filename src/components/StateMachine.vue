@@ -1,5 +1,6 @@
 <template>
     <div id="state-machine_root">
+        <h1>Чё-то про автоматы</h1>
         <el-button @click="fillGraphDebug">Заполнить граф (отладка1)</el-button>
         <el-button @click="fillGraphDebug2">Заполнить граф (отладка2)</el-button>
         <div class="title">

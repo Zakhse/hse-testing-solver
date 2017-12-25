@@ -14,6 +14,7 @@
         cursor: pointer;
         font-weight: bold;
         border-bottom: 3px solid $main-color;
+
         &.is-active, &:hover {
             color: white !important;
             border-bottom-color: white;

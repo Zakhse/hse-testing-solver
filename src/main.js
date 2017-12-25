@@ -8,6 +8,11 @@ import 'normalize.css';
 import App from './App';
 import router from './router';
 
+// let randomColor = 0;
+// while (randomColor.toString(16) < '555555' || randomColor.toString(16) > 'c0c0c0') {
+//     console.log('меняем');
+//     randomColor = Math.random().toString(16).substr(-6);
+// }
 document.documentElement.style.setProperty('--main-color', `#${Math.random().toString(16).substr(-6)}`);
 
 Vue.use(ElementUI);
