@@ -2,11 +2,15 @@
     <div id="footer_root">
         <img id="coolyamin" src="../assets/images/deal.png">
         <span>
-            Благодарности:
+            Разрабатывали:
+            <template v-for="(developer, i) in developers">
+                <a :href="`https://vk.com/${developer.vkId}`">{{developer.name}}</a>
+                <template v-if="i !== developers.length - 1">, </template>
+            </template>
             <br>
-            <template v-for="(collaborator, i) in collaborators">
-                <a :href="`https://vk.com/${collaborator.vkId}`">{{collaborator.name}}</a>
-                <template v-if="i !== collaborators.length - 1">, </template>
+            Помогали: <template v-for="(tester, i) in testers">
+                <a :href="`https://vk.com/${tester.vkId}`">{{tester.name}}</a>
+                <template v-if="i !== testers.length - 1">, </template>
             </template>
         </span>
     </div>
@@ -41,16 +45,20 @@ export default {
     name: 'Footer',
     data() {
         return {
-            collaborators: [{
+            developers: [{
                 name: 'Екатерина',
                 vkId: 'one_step_cl0ser'
             }, {
                 name: 'Илья',
                 vkId: 'isgulkov'
             }, {
+                name: 'Данил',
+                vkId: 'heckvik'
+            }, {
                 name: 'Сергей',
                 vkId: 'zakhse'
-            }, {
+            }],
+            testers: [{
                 name: 'Саша',
                 vkId: 'id33861656'
             }, {

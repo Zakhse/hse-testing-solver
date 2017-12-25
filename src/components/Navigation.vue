@@ -13,6 +13,7 @@
     @import '../assets/vars';
 
     #navigation_root {
+        overflow: scroll;
         display: flex;
         flex-shrink: 0;
         justify-content: flex-start;
