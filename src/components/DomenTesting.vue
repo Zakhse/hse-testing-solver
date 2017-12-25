@@ -93,61 +93,64 @@
             </tr>
             <tr>
                 <td>A</td>
-                <td>2<sup>31</sup> - 1 ≥ Y ≥ 2<sup>30</sup> - 1, X < 2*Y + 2, X≠0</td>
+                <td>2<sup>31</sup> - 1 ≥ Y ≥ 2<sup>30</sup> - 1, X < 2*Y + 2</td>
                 <td>C</td>
             </tr>
             <tr>
                 <td>B</td>
-                <td>2<sup>31</sup> - 1 ≥ Y ≥ 2<sup>30</sup> - 1, X ≥ 2*Y + 2, X≠0</td>
+                <td>2<sup>31</sup> - 1 ≥ Y ≥ 2<sup>30</sup> - 1, X ≥ 2*Y + 2</td>
                 <td>C, D</td>
             </tr>
             <tr>
                 <td>C</td>
-                <td>2<sup>31</sup> - 1 ≥ Y ≥ 2<sup>30</sup> - 1, X = 2*Y + 2, X≠0</td>
+                <td>2<sup>31</sup> - 1 ≥ Y ≥ 2<sup>30</sup> - 1, X = 2*Y + 2</td>
                 <td>-</td>
             </tr>
             <tr>
                 <td>D</td>
-                <td>Y = 2<sup>30</sup> - 1, X≠0</td>
+                <td>Y = 2<sup>30</sup> - 1</td>
                 <td>-</td>
             </tr>
             <tr>
                 <td>E</td>
-                <td>2<sup>30</sup> - 1 > Y ≥ -2<sup>30</sup> - 1, X < 2*Y + 2, X≠0</td>
+                <td>2<sup>30</sup> - 1 > Y ≥ -2<sup>30</sup> - 1, X < 2*Y + 2</td>
                 <td>D, G</td>
             </tr>
             <tr>
                 <td>F</td>
-                <td>2<sup>30</sup> - 1 > Y ≥ -2<sup>30</sup> - 1, X ≥ 2*Y + 2, X≠0</td>
+                <td>2<sup>30</sup> - 1 > Y ≥ -2<sup>30</sup> - 1, X ≥ 2*Y + 2</td>
                 <td>G, H</td>
             </tr>
             <tr>
                 <td>G</td>
-                <td>2<sup>30</sup> - 1 > Y ≥ -2<sup>30</sup> - 1, X = 2*Y + 2, X≠0</td>
+                <td>2<sup>30</sup> - 1 > Y ≥ -2<sup>30</sup> - 1, X = 2*Y + 2</td>
                 <td>-</td>
             </tr>
             <tr>
                 <td>H</td>
-                <td>Y = 2<sup>30</sup> - 1, X≠0</td>
+                <td>Y = 2<sup>30</sup> - 1</td>
                 <td>-</td>
             </tr>
             <tr>
                 <td>I</td>
-                <td>-2<sup>30</sup> - 1 > Y ≥ -2<sup>31</sup>, X < 2*Y + 2, X≠0</td>
+                <td>-2<sup>30</sup> - 1 > Y ≥ -2<sup>31</sup>, X < 2*Y + 2</td>
                 <td>H, K</td>
             </tr>
             <tr>
                 <td>J</td>
-                <td>-2<sup>30</sup> - 1 > Y ≥ -2<sup>31</sup>, X ≥ 2*Y + 2, X≠0</td>
+                <td>-2<sup>30</sup> - 1 > Y ≥ -2<sup>31</sup>, X ≥ 2*Y + 2</td>
                 <td>K</td>
             </tr>
             <tr>
                 <td>K</td>
-                <td>-2<sup>30</sup> - 1 > Y ≥ -2<sup>31</sup>, X = 2*Y + 2, X≠0</td>
+                <td>-2<sup>30</sup> - 1 > Y ≥ -2<sup>31</sup>, X = 2*Y + 2</td>
                 <td>-</td>
             </tr>
         </table>
 
+        Также напишите где-нибудь, что тесты не должны попадать на прямую Х = 0.
+        <br>
+        <br>
 
     </div>
 </template>
