@@ -14,21 +14,23 @@
     @import '../assets/vars';
 
     #navigation_root {
-        overflow: scroll;
         display: flex;
         flex-shrink: 0;
+        flex-wrap: wrap;
         justify-content: flex-start;
         align-items: stretch;
         background-color: $main-color;
-        height: 3em;
 
         .navigation-item {
             display: flex;
+            flex-shrink: 1;
+            flex-basis: 10%;
             align-items: center;
             padding-left: 5px;
             padding-right: 5px;
+            height: 3em;
             @media (max-width: 450px) {
-                font-size: 0.8em;
+                font-size: 0.7em;
             }
             &.brand-title {
                 font-weight: bold;
