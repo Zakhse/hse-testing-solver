@@ -74,14 +74,14 @@
                 <span v-else>нет</span>
             </div>
             <div>
-                <b>Характеризующие множества (первые 10, не нужно записывать в ответы):</b>
+                <b>Характеризующие множества (первые 10) (в ответ пишем самое первое):</b>
                 <span v-if="characterizingSets.length">
                     {{formattedCharacterizingSets}}
                 </span>
                 <span v-else>нет</span>
             </div>
             <div>
-                <b>Основное характеризующее множество (тупо самое первое и самое короткое, его записываем в ответ):</b>
+                <b>Основное характеризующее множество (это пишем в ответ в бланке, оно потом используется в составлении тестов):</b>
                 <span v-if="characterizingSets.length">
                     {{formattedMainCharacterizingSet}}
                 </span>
