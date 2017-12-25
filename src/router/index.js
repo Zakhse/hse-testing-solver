@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import StateMachine from '../components/StateMachine';
 import Branches from '../components/Branches';
 import Regex from '../components/Regex';
+import DomenTesting from '../components/DomenTesting';
 
 Vue.use(Router);
 
@@ -14,7 +15,13 @@ export default new Router({
         path: '/statemachine',
         name: 'StateMachine',
         component: StateMachine
-    }, {
+    },
+    {
+        path: '/domentesting',
+        name: 'DomenTesting',
+        component: DomenTesting
+    },
+    {
         path: '/branches',
         name: 'Branches',
         component: Branches
