@@ -2,12 +2,20 @@
     <div id="state-machine_root">
         <el-button @click="fillGraphDebug">Заполнить граф (отладка1)</el-button>
         <el-button @click="fillGraphDebug2">Заполнить граф (отладка2)</el-button>
+        <div class="title">
+            <b>1.</b> Вводим данные автомата:
+        </div>
         <div id="graph-input">
-            <el-input-number id="nodes-number-input"
-                             v-model="nodesNumber"
-                             :min="3"
-                             :max="MAX_NODES"
-            ></el-input-number>
+            <div id="graph-nodes-number">
+                <span>
+                    Количество состояний:
+                </span>
+                <el-input-number id="nodes-number-input"
+                                 v-model="nodesNumber"
+                                 :min="3"
+                                 :max="MAX_NODES"
+                ></el-input-number>
+            </div>
             <div id="invalid-graph" v-if="!usedGraphIsValid">
                 Ошибка в ведённых данных
             </div>
@@ -46,6 +54,17 @@
                 </template>
             </table>
         </div>
+        <div class="title">
+            <b>2.</b> Сверяем с графом из условия:
+        </div>
+        <div id="graph-vizualization">
+            <div id="graphviz-render" v-html="graphVizRender">
+
+            </div>
+        </div>
+        <div class="title">
+            <b>3.</b> Записываем ответы:
+        </div>
         <div id="graph-results" v-if="usedGraphIsValid">
             <div>
                 <b>Различающие последовательности:</b>
@@ -55,14 +74,14 @@
                 <span v-else>нет</span>
             </div>
             <div>
-                <b>Характеризующие множества (первые 10):</b>
+                <b>Характеризующие множества (первые 10, не нужно записывать в ответы):</b>
                 <span v-if="characterizingSets.length">
                     {{formattedCharacterizingSets}}
                 </span>
                 <span v-else>нет</span>
             </div>
             <div>
-                <b>Основное характеризующее множество (тупо самое первое в списке и самое короткое):</b>
+                <b>Основное характеризующее множество (тупо самое первое и самое короткое, его записываем в ответ):</b>
                 <span v-if="characterizingSets.length">
                     {{formattedMainCharacterizingSet}}
                 </span>
@@ -117,10 +136,14 @@
                 <span v-else>нет</span>
             </div>
         </div>
+        <!--<div class="title">-->
+        <!--<b>4.</b> Выбираем себе новую бейсболку, попивая "Хамовники":-->
+        <!--</div>-->
     </div>
 </template>
 
 <script>
+import Viz from 'viz.js';
 import {
     computeReactionSequencesTable,
     findDeterminingSequences,
@@ -206,6 +229,17 @@ export default {
         wpTests() {
             return findWpTests(this.usedStateMachineGraph, this.coveringSet, this.characterizingSets[0],
                 this.identificationSets, this.coveringRoutes);
+        },
+        graphVizNotation() {
+            return `
+            digraph {
+            rankdir="LR";
+            ${this.usedStateMachineGraph.map((startNode, index) => this.stimuluses.map(stimulus =>
+                `${index} -> ${startNode[stimulus].endpoint} [label = "${stimulus.toUpperCase()}/${startNode[stimulus].reaction.toUpperCase()}"];`).join('\n')).join('\n')}
+            }`;
+        },
+        graphVizRender() {
+            return Viz(this.graphVizNotation);
         }
     },
     methods: {
@@ -249,8 +283,21 @@ export default {
 };
 </script>
 <style lang="scss">
+    #graph-input_routes {
+        .el-select {
+            width: 70px;
+        }
+    }
+
+    #graphviz-render {
+        > svg {
+            width: 100%
+        }
+    }
+</style>
+<style lang="scss" scoped>
     #state-machine_root {
-        margin: 7px 20% 7px 20%;
+        margin: 7px 20%;
 
         @media (max-width: 750px) {
             margin-left: 10%;
@@ -262,40 +309,57 @@ export default {
             margin-right: 10px;
         }
 
+        .title {
+            margin-top: 10px;
+            margin-bottom: 6px;
+        }
+
         #invalid-graph {
             color: red;
             font-size: 1.5em;
             font-weight: bold;
         }
 
-        #graph-input_routes {
-            .el-select {
-                width: 70px;
+        #graph-input {
+            #graph-nodes-number {
+                margin-left: -10px;
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                > span {
+                    display: flex;
+                    flex-shrink: 1;
+                }
+                > * {
+                    margin-left: 10px;
+                }
+            }
+
+            #graph-input_routes {
+                text-align: center;
+                td, th {
+                    padding: 3px;
+                }
+            }
+        }
+
+        #graph-vizualization {
+            #graphviz-render {
+            }
+        }
+
+        #graph-results {
+            #identification-sets-table {
+                text-align: center;
+                td, th {
+                    padding: 3px;
+                    text-align: center;
+                }
             }
         }
     }
-</style>
-<style lang="scss" scoped>
+
     .uppercase {
         text-transform: uppercase;
-    }
-
-    #graph-input {
-        #graph-input_routes {
-            text-align: center;
-            td, th {
-                padding: 3px;
-            }
-        }
-    }
-
-    #graph-results {
-        #identification-sets-table {
-            text-align: center;
-            td, th {
-                padding: 3px;
-                text-align: center;
-            }
-        }
     }
 </style>
