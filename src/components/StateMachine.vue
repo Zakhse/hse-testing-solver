@@ -67,22 +67,29 @@
             <b>3.</b> Записываем ответы:
         </div>
         <div id="graph-results" v-if="usedGraphIsValid">
+            <!--<div>-->
+                <!--<b>Различающие последовательности:</b>-->
+                <!--<span v-if="determiningSequences.length">-->
+                    <!--{{formattedDetermingSequences}}-->
+                <!--</span>-->
+                <!--<span v-else>нет</span>-->
+            <!--</div>-->
+            <!--<div>-->
+                <!--<b>Характеризующие множества (первые 10) (в ответ пишем самое первое):</b>-->
+                <!--<span v-if="characterizingSets.length">-->
+                    <!--{{formattedCharacterizingSets}}-->
+                <!--</span>-->
+                <!--<span v-else>нет</span>-->
+            <!--</div>-->
             <div>
-                <b>Различающие последовательности:</b>
+                <b>Различающая последовательность:</b>
                 <span v-if="determiningSequences.length">
-                    {{formattedDetermingSequences}}
+                    {{formattedMainDetermingSequence}}
                 </span>
                 <span v-else>нет</span>
             </div>
             <div>
-                <b>Характеризующие множества (первые 10) (в ответ пишем самое первое):</b>
-                <span v-if="characterizingSets.length">
-                    {{formattedCharacterizingSets}}
-                </span>
-                <span v-else>нет</span>
-            </div>
-            <div>
-                <b>Основное характеризующее множество (это пишем в ответ в бланке, оно потом используется в составлении тестов):</b>
+                <b>Характеризующее множество:</b>
                 <span v-if="characterizingSets.length">
                     {{formattedMainCharacterizingSet}}
                 </span>
@@ -186,6 +193,9 @@ export default {
         },
         formattedDetermingSequences() {
             return `${this.determiningSequences.join(', ')}`;
+        },
+        formattedMainDetermingSequence() {
+            return `${this.determiningSequences[0]}`;
         },
         setsSequences() {
             return computeCharacterizingSetTable(this.reactionSequences);
