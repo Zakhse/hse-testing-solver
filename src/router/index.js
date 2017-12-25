@@ -8,26 +8,30 @@ import DomenTesting from '../components/DomenTesting';
 Vue.use(Router);
 
 export default new Router({
-    routes: [{
-        path: '/',
-        redirect: { name: 'StateMachine' }
-    }, {
-        path: '/statemachine',
-        name: 'StateMachine',
-        component: StateMachine
-    },
-    {
-        path: '/domentesting',
-        name: 'DomenTesting',
-        component: DomenTesting
-    },
-    {
-        path: '/branches',
-        name: 'Branches',
-        component: Branches
-    }, {
-        path: '/regex',
-        name: 'Regex',
-        component: Regex
-    }]
+    routes: [
+        {
+            path: '/',
+            redirect: { name: 'StateMachine' }
+        },
+        {
+            path: '/statemachine',
+            name: 'StateMachine',
+            component: StateMachine
+        },
+        {
+            path: '/domentesting',
+            name: 'DomenTesting',
+            component: DomenTesting
+        },
+        {
+            path: '/branches',
+            name: 'Branches',
+            component: Branches
+        },
+        {
+            path: '/regex',
+            name: 'Regex',
+            component: Regex
+        }
+    ]
 });
