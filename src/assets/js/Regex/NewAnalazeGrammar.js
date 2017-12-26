@@ -1,84 +1,93 @@
 /* eslint-disable */
-function getAllVariantVectors(prod) {
-    let allVariants = [[]];
-    prod.forEach(subProd => {
-        const varIds = getLocalVariants(subProd);
+
+var getAllVariantVectors = function(prod) {
+    var allVariants = [[]];
+
+    prod.forEach(function(subProd) {
+        var varIds = getLocalVariants(subProd);
+
         allVariants = appendToAllArrays(allVariants, varIds);
     });
-    return allVariants;
-}
 
-function appendToAllArrays(penises, enlargements) {
-    const result = [];
-    penises.forEach(s => {
-        enlargements.forEach(t => {
+    return allVariants;
+};
+
+var appendToAllArrays = function(penises, enlargements) {
+    var result = [];
+
+    penises.forEach(function(s){
+        enlargements.forEach(function(t) {
             result.push(s.concat([t]));
         });
     });
+
     return result;
-}
+};
 
-function getLocalVariants(subProd) {
-    if (typeof subProd === 'string')
+var getLocalVariants = function(subProd) {
+    if(typeof subProd === 'string') {
         return [subProd];
-
-    else if (subProd.hasOwnProperty('?'))
-        return [''].concat(getLocalVariants(subProd['?']));
-
-    else if (subProd.hasOwnProperty('*')) {
-        const variants = {
-            '': true
+    }
+    else if(subProd.hasOwnProperty('?')) {
+        return [""].concat(getLocalVariants(subProd['?']));
+    }
+    else if(subProd.hasOwnProperty('*')) {
+        var variants = {
+            "": true
         };
 
-        const sVariants = [''].concat(getLocalVariants(subProd['*']));
+        var sVariants = [""].concat(getLocalVariants(subProd['*']));
 
-        sVariants.forEach(s => {
-            sVariants.forEach(t => {
+        sVariants.forEach(function(s) {
+            sVariants.forEach(function(t) {
                 variants[s + t] = true;
             });
         });
 
         return Object.keys(variants);
-    } else if (subProd.hasOwnProperty('+')) {
-        const newVariants = {};
+    }
+    else if(subProd.hasOwnProperty('+')) {
+        var newVariants = {};
 
-        const pVariants = [''].concat(getLocalVariants(subProd['+']));
+        var pVariants = [""].concat(getLocalVariants(subProd['+']));
 
-        pVariants.forEach(s => {
-            pVariants.forEach(t => {
-                pVariants.forEach(u => {
+        pVariants.forEach(function(s) {
+            pVariants.forEach(function(t) {
+                pVariants.forEach(function(u) {
                     newVariants[s + t + u] = true;
                 });
             });
         });
 
-        delete newVariants[''];
+        delete newVariants[""];
 
         return Object.keys(newVariants);
-    } else if (subProd.hasOwnProperty('|'))
+    }
+    else if(subProd.hasOwnProperty('|')) {
         return subProd['|'];
-}
+    }
+};
 
-function getExplodedProd(prod) {
+var getExplodedProd = function(prod) {
     return prod.map(getLocalVariants);
-}
+};
 
-function sortInOrderOfNumVarsDesc(explodedProd) {
-    const sortedProd = [];
-    const oldLocations = {};
+var sortInOrderOfNumVarsDesc = function(explodedProd) {
+    var sortedProd = [];
+    var oldLocations = {};
 
     explodedProd = explodedProd.concat([]);
 
-    for (let i = 0; i < explodedProd.length; i++) {
-        let iBiggest = null;
-        let nBiggest = 0;
+    for(var i = 0; i < explodedProd.length; i++) {
+        var iBiggest = null;
+        var nBiggest = 0;
 
-        for (let j = 0; j < explodedProd.length; j++) {
-            if (explodedProd[j] === null)
+        for(var j = 0; j < explodedProd.length; j++) {
+            if(explodedProd[j] === null) {
                 continue;
+            }
 
-
-            if (explodedProd[j].length > nBiggest) {
+            if(explodedProd[j].length > nBiggest) {
                 nBiggest = explodedProd[j].length;
                 iBiggest = j;
             }
@@ -90,145 +99,191 @@ function sortInOrderOfNumVarsDesc(explodedProd) {
     }
 
     return {
-        sortedProd,
-        oldLocations
+        sortedProd: sortedProd,
+        oldLocations: oldLocations
     };
-}
+};
 
-function getPairwiseSetForTwo(nVars, mVars) {
-    const pairwiseSet = [];
-    for (let i = 0; i < nVars; i++)
-        for (let j = 0; j < mVars; j++)
+var getPairwiseSetForTwo = function(nVars, mVars) {
+    var pairwiseSet = [];
+
+    for(var i = 0; i < nVars; i++) {
+        for(var j = 0; j < mVars; j++) {
             pairwiseSet.push([i, j]);
-    return pairwiseSet;
-}
+        }
+    }
 
-const getAllPairsBetweenManyAndOne = function (manyNs, oneN) {
-    const allPairs = {};
-    manyNs.forEach((particularN, iP) => {
-        for (let i = 0; i < particularN; i++)
-            for (let j = 0; j < oneN; j++)
-                allPairs[`${iP}-${i}/${j}`] = true;
+    return pairwiseSet;
+};
+
+var getAllPairsBetweenManyAndOne = function(manyNs, oneN) {
+    var allPairs = {};
+
+    manyNs.forEach(function(particularN, iP) {
+        for(var i = 0; i < particularN; i++) {
+            for(var j = 0; j < oneN; j++) {
+                allPairs["" + iP + "-" + i + "/" + j] = true;
+            }
+        }
     });
+
     return allPairs;
 };
 
-const getPairsWithParticularTest = function (v, newX) {
-    const pairs = {};
-    v.forEach((x, i) => {
-        pairs[`${i}-${x}/${newX}`] = true;
+var getPairsWithParticularTest = function(v, newX) {
+    var pairs = {};
+
+    v.forEach(function(x, i) {
+        pairs["" + i + "-" + x + "/" + newX] = true;
     });
+
     return pairs;
 };
 
 function getFirstPerm(nVars, mVars) {
-    const permutation = [];
-    for (let i = 0; i < nVars; i++)
-        for (let j = 0; j < mVars; j++)
+    var permutation = [];
+
+    for(var i = 0; i < nVars; i++) {
+        for(var j = 0; j < mVars; j++) {
             permutation.push(i);
+        }
+    }
+
     return permutation;
 }
 
 function reprPair(x, y) {
-    return `${x}/${y}`;
+    return x + "/" + y;
 }
 
 function getPairsBetweenParams(nVars, mVars) {
-    const pairs = {};
-    for (let i = 0; i < nVars; i++)
-        for (let j = 0; j < mVars; j++)
+    var pairs = {};
+
+    for(var i = 0; i < nVars; i++) {
+        for(var j = 0; j < mVars; j++) {
             pairs[reprPair(i, j)] = true;
+        }
+    }
+
     return pairs;
 }
 
 function subtractSets(one, another) {
-    const newSet = {};
-    one.forEach(x => {
-        if (another[x] === undefined)
+    var newSet = {};
+
+    one.forEach(function(x) {
+        if(another[x] === undefined) {
             newSet[x] = true;
+        }
     });
+
     return newSet;
 }
 
 function nextPermutation(perm, nValues) {
-    perm[0] += 1;
-    for (let i = 0; i < perm.length; i++)
-        if (perm[i] === nValues) {
-            if (i + 1 === perm.length)
-                return false;
+    if(perm.length === 0) {
+        return false;
+    }
 
+    perm[0] += 1;
+
+    for(var i = 0; i < perm.length; i++) {
+        if(perm[i] === nValues) {
+            if(i + 1 === perm.length) {
+                return false;
+            }
 
             perm[i] = 0;
             perm[i + 1] += 1;
-        } else
+        }
+        else {
             break;
-
+        }
+    }
 
     return true;
 }
 
 function producePairwiseSetBruteforceIPO(numsOfVariants) {
-    if (numsOfVariants.length < 2)
+    if(numsOfVariants.length < 2) {
         return []; // no pairs between just one parameter LMAO
+    }
 
+    var firstPerm = getFirstPerm(numsOfVariants[0], numsOfVariants[1]);
 
-    const firstPerm = getFirstPerm(numsOfVariants[0], numsOfVariants[1]);
+    for(var nTests = firstPerm.length; ; nTests++) {
+        var permExtension = Array(nTests - firstPerm.length).fill(0);
 
-    const state = {
+        do {
+            var tests = producePairwiseSetBruteforceWithInit(numsOfVariants, firstPerm.concat(permExtension));
+
+            if(tests !== null) {
+                return tests;
+            }
+        } while(nextPermutation(permExtension));
+    }
+}
+
+function producePairwiseSetBruteforceWithInit(numsOfVariants, firstPerm) {
+    var state = {
         numTests: firstPerm.length,
-        numsOfVariants,
+        numsOfVariants: numsOfVariants,
         permutations: [firstPerm],
 
-        candidateSuitsAll(candidate) {
-            for (let iPerm = 0; iPerm < this.permutations.length; iPerm++)
-                if (!this.candidateSuitsPerm(iPerm, candidate))
+        candidateSuitsAll: function(candidate) {
+            for(var iPerm = 0; iPerm < this.permutations.length; iPerm++) {
+                if(!this.candidateSuitsPerm(iPerm, candidate)) {
                     return false;
-
+                }
+            }
 
             return true;
         },
 
-        candidateSuitsPerm(iPerm, candidate) {
-            const uncoveredPairs =
-                getPairsBetweenParams(this.numsOfVariants[iPerm], this.numsOfVariants[this.permutations.length]);
+        candidateSuitsPerm: function(iPerm, candidate) {
+            var uncoveredPairs = getPairsBetweenParams(this.numsOfVariants[iPerm], this.numsOfVariants[this.permutations.length]);
 
-            for (let iTest = 0; iTest < this.numTests; iTest++) {
-                const newPair = reprPair(this.permutations[iPerm][iTest], candidate[iTest]);
+            for(var iTest = 0; iTest < this.numTests; iTest++) {
+                var newPair = reprPair(this.permutations[iPerm][iTest], candidate[iTest]);
 
-                if (uncoveredPairs[newPair] !== undefined)
+                if(uncoveredPairs[newPair] !== undefined) {
                     delete uncoveredPairs[newPair];
+                }
             }
 
             return Object.keys(uncoveredPairs).length === 0;
         },
 
-        addPermutation(perm) {
+        addPermutation: function(perm) {
             this.permutations.push(perm);
         },
 
-        getTests() {
-            const tests = [];
+        getTests: function() {
+            var tests = [];
 
-            for (var iTest = 0; iTest < this.numTests; iTest++)
+            for(var iTest = 0; iTest < this.numTests; iTest++) {
                 tests.push(
-                    this.permutations.map(perm => {
-                        const x = perm[iTest];
+                    this.permutations.map(function(perm) {
+                        var x = perm[iTest];
 
                         return x !== -1 ? x : 0;
                     })
                 );
-
+            }
 
             return tests;
         }
     };
 
-    for (let iCurrent = 1; iCurrent < numsOfVariants.length; iCurrent++) {
-        const candidatePerm = Array(state.numTests).fill(null).map(() => 0);
+    for(var iCurrent = 1; iCurrent < numsOfVariants.length; iCurrent++) {
+        var candidatePerm = Array(state.numTests).fill(0);
 
-        while (!state.candidateSuitsAll(candidatePerm, numsOfVariants[iCurrent]))
-            if (!nextPermutation(candidatePerm, numsOfVariants[iCurrent]))
-                return state.getTests();
+        while(!state.candidateSuitsAll(candidatePerm, numsOfVariants[iCurrent])) {
+
+            if(!nextPermutation(candidatePerm, numsOfVariants[iCurrent])) {
+                return null;
+            }
+        }
 
         state.addPermutation(candidatePerm);
     }
@@ -236,97 +291,116 @@ function producePairwiseSetBruteforceIPO(numsOfVariants) {
     return state.getTests();
 }
 
-function findVariantVectorsThatCoverAllPairs(prod) {
-    const explodedProd = getExplodedProd(prod);
+var findVariantVectorsThatCoverAllPairs = function(prod) {
+    var explodedProd = getExplodedProd(prod);
 
-    const sortResult = sortInOrderOfNumVarsDesc(explodedProd);
+    var sortResult = sortInOrderOfNumVarsDesc(explodedProd);
 
-    let numVectors = producePairwiseSetBruteforceIPO(sortResult.sortedProd.map(vars => vars.length));
+    var numVectors = producePairwiseSetBruteforceIPO(sortResult.sortedProd.map(function(vars) { return vars.length; }));
 
-    numVectors = numVectors.map(v => {
-        const newV = v.map(() => 0);
+    numVectors = numVectors.map(function(v) {
+        var newV = v.map(function() { return 0; });
 
-        v.forEach((x, i) => {
+        v.forEach(function(x, i) {
             newV[sortResult.oldLocations[i]] = x;
         });
 
         return newV;
     });
 
-    const coveringSetOfWords = numVectors.map(v => v.map((x, i) => explodedProd[i][x]));
+    var coveringSetOfWords = numVectors.map(function(v) {
+        return v.map(function(x, i) {
+            return explodedProd[i][x];
+        })
+    });
 
-    const uncoveredPairs = getAllPairsInProd(explodedProd);
+    var uncoveredPairs = getAllPairsInProd(explodedProd);
 
-    const numTotalPairs = Object.keys(uncoveredPairs).length;
+    var numTotalPairs = Object.keys(uncoveredPairs).length;
 
-    getActualPairs(coveringSetOfWords).forEach(pair => {
+    getActualPairs(coveringSetOfWords).forEach(function(pair) {
         uncoveredPairs.splice(uncoveredPairs.indexOf(pair), 1);
     });
 
     return {
         coveringSet: coveringSetOfWords,
-        numTotalPairs,
+        numTotalPairs: numTotalPairs,
         numUncoveredPairs: Object.keys(uncoveredPairs).length
     };
 };
 
-function indexMaxByKey(arr, f) {
-    let iMax = 0;
-    let maxKey = f(arr[0]);
+var indexMaxByKey = function(arr, f) {
+    var iMax = 0;
+    var maxKey = f(arr[0]);
 
-    for (let i = 1; i < arr.length; i++) {
-        const currentKey = f(arr[i]);
+    for(var i = 1; i < arr.length; i++) {
+        var currentKey = f(arr[i]);
 
-        if (currentKey > maxKey) {
+        if(currentKey > maxKey) {
             maxKey = currentKey;
             iMax = i;
         }
     }
 
     return iMax;
-}
+};
 
-function countNewPairs(knownPairs, variantV) {
-    const variantPairs = getPairsBetweenParams(variantV);
-    let numNewPairs = 0;
-    variantPairs.forEach(p => {
-        if (knownPairs[p] === undefined)
+var countNewPairs = function(knownPairs, variantV) {
+    var variantPairs = getPairsBetweenParams(variantV);
+
+    var numNewPairs = 0;
+
+    variantPairs.forEach(function(p) {
+        if(knownPairs[p] === undefined) {
             numNewPairs += 1;
+        }
     });
+
     return numNewPairs;
-}
+};
 
-function countTotalPairs(prod) {
-    let result = 0;
-    for (let i = 0; i < prod.length; i++)
-        for (let j = i + 1; j < prod.length; j++)
+var countTotalPairs = function(prod) {
+    var result = 0;
+
+    for(var i = 0; i < prod.length; i++) {
+        for(var j = i + 1; j < prod.length; j++) {
             result += getLocalVariants(prod[i]).length * getLocalVariants(prod[j]).length;
-    return result;
-}
+        }
+    }
 
-function getActualPairs(supposedPairwiseSet) {
-    const pairs = {};
-    for (let iTest = 0; iTest < supposedPairwiseSet.length; iTest++)
-        for (let i = 0; i < supposedPairwiseSet[iTest].length; i++)
-            for (let j = i + 1; j < supposedPairwiseSet[iTest].length; j++)
-                pairs[`${i}${supposedPairwiseSet[iTest][i]}/${j}${supposedPairwiseSet[iTest][j]}`] = true;
+    return result
+};
+
+var getActualPairs = function(supposedPairwiseSet) {
+    var pairs = {};
+
+    for(var iTest = 0; iTest < supposedPairwiseSet.length; iTest++) {
+        for(var i = 0; i < supposedPairwiseSet[iTest].length; i++) {
+            for(var j = i + 1; j < supposedPairwiseSet[iTest].length; j++) {
+                pairs["" + i + supposedPairwiseSet[iTest][i] + "/" + j + supposedPairwiseSet[iTest][j]] = true;
+            }
+        }
+    }
+
     return Object.keys(pairs);
-}
+};
 
-function getAllPairsInProd(variantV) {
-    const pairs = [];
+var getAllPairsInProd = function(variantV) {
+    var pairs = [];
 
-    for (let i = 0; i < variantV.length; i++)
-        for (let j = i + 1; j < variantV.length; j++)
-            variantV[i].forEach(s => {
-                variantV[j].forEach(t => {
-                    pairs.push(`${i}${s}/${j}${t}`);
+    for(var i = 0; i < variantV.length; i++) {
+        for(var j = i + 1; j < variantV.length; j++) {
+            variantV[i].forEach(function(s) {
+                variantV[j].forEach(function(t) {
+                    pairs.push("" + i + s + "/" + j + t);
                 });
             });
-
+        }
+    }
 
     return pairs;
-}
+};
+
 
 export {
     findVariantVectorsThatCoverAllPairs
