@@ -1,7 +1,10 @@
 <template>
     <div id="grammar_root">
         <h1>Чё-то про грамматику</h1>
-        Для этого задания придется качать отдельную программу:<br><br>
+        <span class="old-info">Для этого задания придется качать отдельную программу:</span>
+        <br>
+        <router-link class="route-to-regex" :to="{name: 'Regex'}">Уже не придётся!</router-link>
+        <br><br>
         <a href="https://yadi.sk/d/gIAO8ifA3QvcXH">Для маководов</a><br>
         <a href="https://yadi.sk/d/0SHFnd2p3QvhG5">Для шиндоводов</a><br>
         Линуксоиды, просьба понять и простить.<br><br>
@@ -76,6 +79,14 @@
         .title {
             margin-top: 10px;
             margin-bottom: 6px;
+        }
+
+        .old-info {
+            text-decoration: line-through;
+        }
+        .route-to-regex {
+            font-size: 2em;
+            color: green;
         }
     }
 
