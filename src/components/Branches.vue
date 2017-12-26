@@ -19,7 +19,8 @@
         </div>
         <div id="if-result">
             <div class="title">
-                <b>2.</b> Переписываем в табличку результат:
+                <b>2.</b> Переписываем в табличку результат (Розовым выделены наборы данных, которых не может
+                существовать. Например, условия y > 0 и y < 0 одновременно принимают значение 1. <span style="color: red">Их в ответ выписывать не нужно!!!</span>):
             </div>
             <table id="result-table" cellspacing="0" border bordercolor="black">
                 <tr class="heading">
@@ -38,7 +39,7 @@
                     <th class="equally_narrow">II</th>
                     <th class="equally_narrow">III</th>
                 </tr>
-                <tr v-for="(row, i) in rows">
+                <tr v-for="(row, i) in rows" :class="{'undefined-set': indexOfUndefinedSets.includes(i)}">
                     <td class="row-number">{{i+1}}</td>
                     <td class="equally_narrow" v-for="n in 7">{{row[n-1]}}</td>
                     <td>{{ixSelected(i) ? '*' : ''}}</td>
@@ -95,6 +96,9 @@
                 }
                 .equally_narrow {
                     width: 12%;
+                }
+                .undefined-set {
+                    background-color: pink;
                 }
             }
             margin-bottom: 20px;
