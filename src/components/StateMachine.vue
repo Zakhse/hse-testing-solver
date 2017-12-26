@@ -1,8 +1,7 @@
 <template>
     <div id="state-machine_root">
-        <h1>Чё-то про автоматы</h1>
-        <el-button @click="fillGraphDebug">Заполнить граф (отладка1)</el-button>
-        <el-button @click="fillGraphDebug2">Заполнить граф (отладка2)</el-button>
+        <!--<el-button @click="fillGraphDebug">Заполнить граф (отладка1)</el-button>-->
+        <!--<el-button @click="fillGraphDebug2">Заполнить граф (отладка2)</el-button>-->
         <div class="title">
             <b>1.</b> Вводим данные автомата:
         </div>
@@ -144,9 +143,9 @@
                 <span v-else>нет</span>
             </div>
         </div>
-        <!--<div class="title">-->
-        <!--<b>4.</b> Выбираем себе новую бейсболку, попивая "Хамовники":-->
-        <!--</div>-->
+        <div class="title">
+            <b>4.</b> Выбираем себе новую бейсболку, попивая "Хамовники"
+        </div>
     </div>
 </template>
 
@@ -254,7 +253,7 @@ export default {
         }
     },
     methods: {
-        fillGraphDebug() {
+        /* fillGraphDebug() {
             this.stateMachineGraph[0]['a'].reaction = 'x';
             this.stateMachineGraph[0]['a'].endpoint = 0;
             this.stateMachineGraph[0]['b'].reaction = 'x';
@@ -289,7 +288,7 @@ export default {
             this.stateMachineGraph[3]['a'].endpoint = 0;
             this.stateMachineGraph[3]['b'].reaction = 'y';
             this.stateMachineGraph[3]['b'].endpoint = 2;
-        }
+        } */
     }
 };
 </script>
@@ -332,6 +331,9 @@ export default {
         }
 
         #graph-input {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             #graph-nodes-number {
                 margin-left: -10px;
                 display: flex;

@@ -1,9 +1,10 @@
 <template>
     <span class="navigation_link"
           :class="isActiveClass"
-          @click="go"
-          @shortkey="go">
-        {{text}}
+          @click="go">
+        <span style="text-align: center; margin: auto;">
+            {{text}}
+        </span>
     </span>
 </template>
 
@@ -12,6 +13,7 @@
 
     .navigation_link {
         cursor: pointer;
+        text-align: center;
         font-weight: bold;
         border-bottom: 3px solid $main-color;
 
